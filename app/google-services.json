@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "127962672516",
+    "project_id": "bodcoffee-e4979",
+    "storage_bucket": "bodcoffee-e4979.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:127962672516:android:9ef5637f1f8a514f1901d1",
+        "android_client_info": {
+          "package_name": "com.example.bodcoffee"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6mR97hYST5qN8-T5zPNxkMzN8O_sMPzs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
