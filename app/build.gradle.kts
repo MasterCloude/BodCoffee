@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.example.bodcoffee"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.bodcoffee"
@@ -18,6 +18,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
+
 
     buildTypes {
         release {
@@ -31,16 +32,50 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+
     }
     kotlinOptions {
         jvmTarget = "11"
     }
+
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3" // Quan trọng để khớp với Compose
+    }
 }
 
+
 dependencies {
+    dependencies {
+        // Firebase Authentication (Chỉ giữ lại `firebase-auth-ktx`)
+        implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
+
+        // Firebase Firestore
+        implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
+
+        // Compose Navigation
+        implementation("androidx.navigation:navigation-compose:2.7.3")
+
+        // Jetpack Compose Material 3
+        implementation("androidx.compose.material3:material3:1.2.0")
+
+        // Jetpack Compose UI
+        implementation("androidx.compose.ui:ui:1.5.3")
+        implementation("androidx.compose.ui:ui-tooling-preview:1.5.3")
+
+        // Lifecycle
+        implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+        implementation("androidx.activity:activity-compose:1.8.0")
+
+        // Debugging tools
+        debugImplementation("androidx.compose.ui:ui-tooling:1.5.3")
+        debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.3")
+
+        // OkHttp (nếu cần)
+        implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    }
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -52,6 +87,7 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.firebase.database)
     implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
