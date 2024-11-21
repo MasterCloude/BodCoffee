@@ -48,34 +48,37 @@ android {
 
 
 dependencies {
-    dependencies {
-        // Firebase Authentication (Chỉ giữ lại `firebase-auth-ktx`)
-        implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
 
-        // Firebase Firestore
-        implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
+    // Firebase Authentication (Chỉ giữ lại `firebase-auth-ktx`)
+    implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
 
-        // Compose Navigation
-        implementation("androidx.navigation:navigation-compose:2.7.3")
+    // Firebase Firestore
+    implementation("com.google.firebase:firebase-firestore-ktx:24.9.1")
 
-        // Jetpack Compose Material 3
-        implementation("androidx.compose.material3:material3:1.2.0")
+    // Compose Navigation
+    implementation("androidx.navigation:navigation-compose:2.7.3")
 
-        // Jetpack Compose UI
-        implementation("androidx.compose.ui:ui:1.5.3")
-        implementation("androidx.compose.ui:ui-tooling-preview:1.5.3")
+    // Jetpack Compose Material 3
+    implementation("androidx.compose.material3:material3:1.2.0")
 
-        // Lifecycle
-        implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-        implementation("androidx.activity:activity-compose:1.8.0")
+    // Jetpack Compose UI
+    implementation("androidx.compose.ui:ui:1.5.3")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.5.3")
 
-        // Debugging tools
-        debugImplementation("androidx.compose.ui:ui-tooling:1.5.3")
-        debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.3")
+    // Lifecycle
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+    implementation("androidx.activity:activity-compose:1.8.0")
 
-        // OkHttp (nếu cần)
-        implementation("com.squareup.okhttp3:okhttp:4.11.0")
-    }
+    // Debugging tools
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.3")
+    debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.3")
+
+    // OkHttp (nếu cần)
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+
+    implementation("androidx.compose.material:material-icons-extended:1.5.3")
+    // Coil for image loading
+    implementation ("io.coil-kt:coil-compose:2.4.0")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
