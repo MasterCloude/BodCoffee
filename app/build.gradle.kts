@@ -49,7 +49,7 @@ android {
 
 dependencies {
 
-    // Firebase Authentication (Chỉ giữ lại `firebase-auth-ktx`)
+    // Firebase Authentication
     implementation("com.google.firebase:firebase-auth-ktx:23.1.0")
 
     // Firebase Firestore
@@ -75,7 +75,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.5.3")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.5.3")
 
-    // OkHttp (nếu cần)
+    // OkHttp
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
 
     implementation("androidx.compose.material:material-icons-extended:1.5.3")

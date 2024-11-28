@@ -20,7 +20,6 @@ import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.bodcoffee.Model.ProductViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
