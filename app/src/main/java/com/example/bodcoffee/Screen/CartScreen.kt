@@ -12,12 +12,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.bodcoffee.BottomNavItem
 import com.example.bodcoffee.Model.ProductViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartScreen(productViewModel: ProductViewModel) {
+fun CartScreen(productViewModel: ProductViewModel, navController: NavHostController) {
     val cartItems = productViewModel.cartItems
     var selectAllChecked by remember { mutableStateOf(false) }
     val selectedItems = remember { mutableStateListOf<Pair<Product, Int>>() }
@@ -65,13 +67,20 @@ fun CartScreen(productViewModel: ProductViewModel) {
                 )
                 Button(
                     onClick = {
-                        // Xử lý logic khi nhấn "Mua ngay"
-                        println("Đặt hàng: $selectedItems")
+                        if (selectedItems.isNotEmpty()) {
+                            // Lưu lịch sử vào Firebase
+                            productViewModel.addToHistory(selectedItems, totalSelectedPrice)
+                            // Xóa giỏ hàng trong Firebase
+                            productViewModel.clearCart()
+                            // Chuyển hướng đến màn hình lịch sử
+                            navController.navigate(BottomNavItem.History.route)
+                        }
                     },
                     enabled = selectedItems.isNotEmpty()
                 ) {
                     Text("Mua ngay")
                 }
+
             }
         }
     ) { paddingValues ->
@@ -131,6 +140,7 @@ fun CartScreen(productViewModel: ProductViewModel) {
         }
     }
 }
+
 
 @Composable
 fun CartItemCard(

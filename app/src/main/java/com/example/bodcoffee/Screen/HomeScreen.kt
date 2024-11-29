@@ -26,7 +26,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-// Dữ liệu sản phẩm
+
 data class Product(
     val id: Int,
     val loaiSanPham: String,

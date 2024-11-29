@@ -12,6 +12,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
+import com.example.bodcoffee.BottomNavItem
 import com.example.bodcoffee.Model.ProductViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -19,13 +20,19 @@ import com.example.bodcoffee.Model.ProductViewModel
 fun ProductDetailScreen(
     navController: NavHostController,
     product: Product,
-    onBuyNow: (Product, Int) -> Unit,
     productViewModel: ProductViewModel
 ) {
     var showDialog by remember { mutableStateOf(false) }
     var quantity by remember { mutableStateOf(1) }
-    var isAddingToCart by remember { mutableStateOf(false) }
+    val snackbarHostState = remember { SnackbarHostState() }
     var snackbarMessage by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(snackbarMessage) {
+        snackbarMessage?.let {
+            snackbarHostState.showSnackbar(it)
+            snackbarMessage = null
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -38,6 +45,7 @@ fun ProductDetailScreen(
                 }
             )
         },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         bottomBar = {
             Row(
                 modifier = Modifier
@@ -47,19 +55,12 @@ fun ProductDetailScreen(
             ) {
                 Button(
                     onClick = {
-                        isAddingToCart = true
                         productViewModel.addToCart(product, quantity)
-                        snackbarMessage = "Đã thêm vào giỏ hàng"
-                        isAddingToCart = false
+                        snackbarMessage = "Đã thêm vào giỏ hàng!"
                     },
-                    modifier = Modifier.weight(1f),
-                    enabled = !isAddingToCart
+                    modifier = Modifier.weight(1f)
                 ) {
-                    if (isAddingToCart) {
-                        CircularProgressIndicator(modifier = Modifier.size(16.dp))
-                    } else {
-                        Text("Thêm vào giỏ hàng")
-                    }
+                    Text("Thêm vào giỏ hàng")
                 }
                 Spacer(modifier = Modifier.width(8.dp))
                 Button(
@@ -76,8 +77,7 @@ fun ProductDetailScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top
+            horizontalAlignment = Alignment.Start
         ) {
             AsyncImage(
                 model = product.anhSanPham,
@@ -88,87 +88,89 @@ fun ProductDetailScreen(
                 contentScale = ContentScale.Crop
             )
             Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = product.tenSanPham,
-                style = MaterialTheme.typography.headlineMedium,
-                textAlign = TextAlign.Start
-            )
+            Text(text = "Tên sản phẩm: ${product.tenSanPham}", style = MaterialTheme.typography.headlineMedium)
             Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Loại: ${product.loaiSanPham}",
-                style = MaterialTheme.typography.bodyLarge,
-                textAlign = TextAlign.Start
-            )
+            Text(text = "Loại: ${product.loaiSanPham}", style = MaterialTheme.typography.bodyLarge)
             Spacer(modifier = Modifier.height(8.dp))
-
             Text(
                 text = "Giá: ${product.giaSanPham} VND",
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.primary,
-                textAlign = TextAlign.Start
+                color = MaterialTheme.colorScheme.primary
             )
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = "Mô tả:",
-                style = MaterialTheme.typography.headlineSmall,
-                textAlign = TextAlign.Start
-            )
-            Text(
-                text = product.moTaSanPham,
-                style = MaterialTheme.typography.bodyMedium,
-                textAlign = TextAlign.Start
-            )
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Mô tả sản phẩm:", style = MaterialTheme.typography.headlineSmall)
+            Text(text = product.moTaSanPham, style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Nội dung sản phẩm:", style = MaterialTheme.typography.headlineSmall)
+            Text(text = product.noiDungSanPham, style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(text = "Đánh giá sản phẩm: ${product.danhGiaSanPham}", style = MaterialTheme.typography.bodyLarge)
         }
     }
 
     if (showDialog) {
         AlertDialog(
             onDismissRequest = { showDialog = false },
-            confirmButton = {
-                Button(onClick = {
-                    productViewModel.addToCart(product, quantity)
-                    showDialog = false
-                    navController.navigate("cart")
-                }) {
-                    Text("Xác nhận mua")
-                }
+            title = {
+                Text(
+                    text = "Xác nhận mua hàng",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
             },
-            dismissButton = {
-                Button(onClick = { showDialog = false }) {
-                    Text("Hủy")
-                }
-            },
-            title = { Text(text = "Xác nhận mua hàng") },
             text = {
                 Column(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     AsyncImage(
                         model = product.anhSanPham,
                         contentDescription = product.tenSanPham,
-                        modifier = Modifier.size(100.dp)
+                        modifier = Modifier.size(100.dp),
+                        contentScale = ContentScale.Crop
                     )
-                    Text(text = "Số lượng: $quantity")
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(text = product.tenSanPham, style = MaterialTheme.typography.headlineSmall)
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        IconButton(onClick = { if (quantity > 1) quantity-- }) { Text("-") }
+                        Text(text = "$quantity", style = MaterialTheme.typography.headlineMedium)
+                        IconButton(onClick = { quantity++ }) { Text("+") }
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Text(
+                        text = "Tổng giá: ${quantity * product.giaSanPham} VND",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.primary,
+                        textAlign = TextAlign.Center
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        productViewModel.addToCart(product, quantity)
+                        showDialog = false
+                        navController.navigate(BottomNavItem.Cart.route)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Mua", textAlign = TextAlign.Center)
+                }
+            },
+            dismissButton = {
+                Button(
+                    onClick = { showDialog = false },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Hủy", textAlign = TextAlign.Center)
                 }
             }
         )
-    }
-
-    if (snackbarMessage != null) {
-        Snackbar(
-            action = {
-                Button(onClick = { snackbarMessage = null }) {
-                    Text("Đóng")
-                }
-            },
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Text(snackbarMessage ?: "")
-        }
     }
 }

@@ -10,6 +10,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 @Composable
 fun RegisterScreen(
@@ -22,6 +23,7 @@ fun RegisterScreen(
     var confirmPassword by remember { mutableStateOf("") }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val auth = FirebaseAuth.getInstance()
+    val firestore = FirebaseFirestore.getInstance()
 
     Column(
         modifier = Modifier
@@ -91,7 +93,26 @@ fun RegisterScreen(
                     auth.createUserWithEmailAndPassword(email, password)
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                onRegisterSuccess() // Điều hướng về màn đăng nhập
+                                // Lấy UID của người dùng sau khi đăng ký thành công
+                                val userId = task.result.user?.uid
+
+                                if (userId != null) {
+                                    // Lưu thông tin người dùng vào Firestore
+                                    val user = hashMapOf(
+                                        "fullName" to fullName,
+                                        "email" to email
+                                    )
+
+                                    firestore.collection("users")
+                                        .document(userId)
+                                        .set(user)
+                                        .addOnSuccessListener {
+                                            onRegisterSuccess() // Điều hướng về màn đăng nhập
+                                        }
+                                        .addOnFailureListener { e ->
+                                            errorMessage = "Failed to save user info: ${e.message}"
+                                        }
+                                }
                             } else {
                                 errorMessage = task.exception?.message
                             }
